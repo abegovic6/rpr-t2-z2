@@ -12,25 +12,25 @@ class IntervalTest {
     }
 
     @org.junit.jupiter.api.Test
-    void toStringTest() throws IllegalAccessException {
+    void toStringTest() throws IllegalArgumentException {
         Interval i = new Interval(1.1, 2.5, true, false);
         assertEquals("[1.1,2.5)", i.toString());
     }
 
     @org.junit.jupiter.api.Test
-    void isIn() throws IllegalAccessException {
+    void isIn() throws IllegalArgumentException {
         Interval i = new Interval(1.1, 2.5, true, false);
         assertTrue(i.isIn(2.3));
     }
 
     @org.junit.jupiter.api.Test
-    void isIn2() throws IllegalAccessException {
+    void isIn2() throws IllegalArgumentException {
         Interval i = new Interval(1.1, 2.5, true, false);
         assertTrue(i.isIn(1.1));
     }
 
     @org.junit.jupiter.api.Test
-    void isIn3() throws IllegalAccessException {
+    void isIn3() throws IllegalArgumentException {
         Interval i = new Interval(1.1, 2.5, true, false);
         assertFalse(i.isIn(2.5));
     }
@@ -48,14 +48,14 @@ class IntervalTest {
     }
 
     @org.junit.jupiter.api.Test
-    void intersect() throws IllegalAccessException {
+    void intersect() throws IllegalArgumentException {
         Interval i = new Interval(1.1, 2.5, true, false);
         Interval i2 = i.intersect(new Interval(2.2, 2.6, true, true));
         assertEquals("[2.2,2.5)", i2.toString());
     }
 
     @org.junit.jupiter.api.Test
-    void intersect1() throws IllegalAccessException {
+    void intersect1() throws IllegalArgumentException {
         Interval i = new Interval(1.1, 2.5, true, false);
         Interval i2 = new Interval(2.2, 2.6, true, true);
         Interval i3 = Interval.intersect(i, i2);
@@ -63,21 +63,21 @@ class IntervalTest {
     }
 
     @org.junit.jupiter.api.Test
-    void equals() throws IllegalAccessException {
+    void equals() throws IllegalArgumentException {
         Interval i = new Interval(1.1, 2.5, true, false);
         Interval i2 = new Interval(1.1, 2.5, true, false);
         assertTrue(i.equals(i2));
     }
 
     @org.junit.jupiter.api.Test
-    void equals2() throws IllegalAccessException {
+    void equals2() throws IllegalArgumentException {
         Interval i = new Interval(1.1, 2.5, true, false);
         Interval i2 = new Interval(1.1, 2.5, true, true);
         assertFalse(i.equals(i2));
     }
 
     @org.junit.jupiter.api.Test
-    void intersect2() throws IllegalAccessException {
+    void intersect2() throws IllegalArgumentException {
         Interval i = new Interval(1.1, 10.5, true, false);
         Interval i2 = new Interval(2.2, 2.6, true, true);
         Interval i3 = Interval.intersect(i, i2);
@@ -85,7 +85,7 @@ class IntervalTest {
     }
 
     @org.junit.jupiter.api.Test
-    void intersect3() throws IllegalAccessException {
+    void intersect3() throws IllegalArgumentException {
         Interval i = new Interval(-1.1, 2.5, true, false);
         Interval i2 = new Interval(2.2, 3.6, false, true);
         Interval i3 = Interval.intersect(i, i2);

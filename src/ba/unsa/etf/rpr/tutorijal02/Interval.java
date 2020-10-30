@@ -12,8 +12,8 @@ public class Interval {
 
     }
 
-    public Interval(double pocetnaTacka, double krajnjaTacka, boolean daLiPocetnaPripada, boolean daLiKrajnjaPripada) throws IllegalAccessException {
-        if(pocetnaTacka > krajnjaTacka) throw new IllegalAccessException();
+    public Interval(double pocetnaTacka, double krajnjaTacka, boolean daLiPocetnaPripada, boolean daLiKrajnjaPripada) throws IllegalArgumentException {
+        if(pocetnaTacka > krajnjaTacka) throw new IllegalArgumentException();
         this.pocetnaTacka = pocetnaTacka;
         this.krajnjaTacka = krajnjaTacka;
         this.daLiPocetnaPripada = daLiPocetnaPripada;
@@ -53,36 +53,48 @@ public class Interval {
     }
 
     public boolean isIn (double tacka) {
-        return tacka >= pocetnaTacka && tacka <= krajnjaTacka;
+        boolean vrati = false;
+        if(krajnjaTacka == tacka && dalikrajnjapripada) vrati = true;
+        if(pocetnaTacka == tacka && daLiPocetnaPripada) vrati = true;
+        if(pocetnaTacka < tacka && krajnjaTacka > tacka) vrati = true;
+        return vrati;
     }
 
     public boolean isNull () {
-        return !(pocetnaTacka - krajnjaTacka == 0);
+        return pocetnaTacka - krajnjaTacka == 0;
     }
 
-    public Interval intersect (Interval i) throws IllegalAccessException {
+    public Interval intersect (Interval i) throws IllegalArgumentException {
         Interval vratiInterval = new Interval();
         if(i.pocetnaTacka > this.krajnjaTacka || this.pocetnaTacka > i.krajnjaTacka) return vratiInterval;
-        if(i.pocetnaTacka > this.pocetnaTacka) {
+        if(i.pocetnaTacka == this.pocetnaTacka) {
             vratiInterval.setPocetnaTacka(i.pocetnaTacka);
             vratiInterval.setDaLiPocetnaPripada(i.daLiPocetnaPripada && this.daLiPocetnaPripada);
         }
-        if(i.krajnjaTacka > this.krajnjaTacka) {
+        if(i.pocetnaTacka == this.pocetnaTacka) {
             vratiInterval.setKrajnjaTacka(i.krajnjaTacka);
-            vratiInterval.setDalikrajnjapripada(i.dalikrajnjapripada && this.dalikrajnjapripada);
+            vratiInterval.setDalikrajnjapripada(i.dalikrajnjapripada && this.daLiPocetnaPripada);
+        }
+        if(i.pocetnaTacka > this.pocetnaTacka) {
+            vratiInterval.setPocetnaTacka(i.pocetnaTacka);
+            vratiInterval.setDaLiPocetnaPripada(i.daLiPocetnaPripada);
+        }
+        if(i.krajnjaTacka < this.krajnjaTacka) {
+            vratiInterval.setKrajnjaTacka(i.krajnjaTacka);
+            vratiInterval.setDalikrajnjapripada(i.dalikrajnjapripada);
         }
         if(i.pocetnaTacka < this.pocetnaTacka) {
             vratiInterval.setPocetnaTacka(this.pocetnaTacka);
-            vratiInterval.setDaLiPocetnaPripada(i.daLiPocetnaPripada && this.daLiPocetnaPripada);
+            vratiInterval.setDaLiPocetnaPripada(this.daLiPocetnaPripada);
         }
-        if(i.krajnjaTacka < this.krajnjaTacka) {
+        if(i.krajnjaTacka > this.krajnjaTacka) {
             vratiInterval.setKrajnjaTacka(this.krajnjaTacka);
-            vratiInterval.setDalikrajnjapripada(i.dalikrajnjapripada && this.dalikrajnjapripada);
+            vratiInterval.setDalikrajnjapripada(this.dalikrajnjapripada);
         }
         return vratiInterval;
     }
 
-    public static Interval intersect (Interval i1, Interval i2) throws IllegalAccessException {
+    public static Interval intersect (Interval i1, Interval i2) throws IllegalArgumentException {
         return i1.intersect(i2);
     }
 
@@ -91,8 +103,8 @@ public class Interval {
         String s = "";
         if(daLiPocetnaPripada) s = s + "[";
         else s = s + "(";
-        if(pocetnaTacka == krajnjaTacka && dalikrajnjapripada && daLiPocetnaPripada)
-            s = s + pocetnaTacka + ", " + krajnjaTacka;
+        if(this.pocetnaTacka != this.krajnjaTacka)
+            s = s + pocetnaTacka + "," + krajnjaTacka;
         if(dalikrajnjapripada) s = s + "]";
         else s = s + ")";
 
@@ -101,9 +113,12 @@ public class Interval {
 
     @Override
     public boolean equals(Object obj) {
-        return this.pocetnaTacka == ((Interval)obj).pocetnaTacka && this.krajnjaTacka == ((Interval)obj).krajnjaTacka
-                && this.dalikrajnjapripada == ((Interval)obj).dalikrajnjapripada &&
-                this.daLiPocetnaPripada == ((Interval)obj).dalikrajnjapripada;
+        if(obj instanceof Interval) {
+            return this.pocetnaTacka == ((Interval) obj).pocetnaTacka && this.krajnjaTacka == ((Interval) obj).krajnjaTacka
+                    && this.dalikrajnjapripada == ((Interval) obj).dalikrajnjapripada &&
+                    this.daLiPocetnaPripada == ((Interval) obj).daLiPocetnaPripada;
+        }
+        return false;
     }
 }
 
